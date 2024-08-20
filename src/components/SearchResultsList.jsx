@@ -46,7 +46,7 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
           <div className="playlist-tracks">
             {selectedTracks.map(track => (
               <div key={track.id} className="playlist-track">
-                <p>{track.name} - {track.artist}</p>
+                <h3><p>{track.name}</p></h3><p>{track.artist} - {track.album}</p>
                 <button onClick={() => handleRemoveTrack(track)}>-</button>
               </div>
             ))}

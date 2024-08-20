@@ -125,3 +125,7 @@ input:focus {
 h1{
   padding: 3%;
 }
+.minus-icon {
+  display: flex;
+  color: royalblue;
+}
