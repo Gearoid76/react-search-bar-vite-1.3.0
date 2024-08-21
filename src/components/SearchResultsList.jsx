@@ -1,6 +1,7 @@
 //src/components/SearchResultsList.jsx
 import React, { useState } from 'react';
 import { SearchResult } from './SearchResult';
+import { FaMinus } from 'react-icons/fa';
 import '../App.css';
 
 export const SearchResultsList = ({ results, onAddToSpotify }) => {
@@ -47,8 +48,8 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
             {selectedTracks.map(track => (
               <div key={track.id} className="playlist-track">
                 <h3><p>{track.name}</p></h3><p>{track.artist} - {track.album}</p>
+                <FaMinus className='minus-icon' onClick={() => handleRemoveTrack(track)} />
                 
-                <button onClick={() => handleRemoveTrack(track)}>-</button>
               </div>
             ))}
           </div>

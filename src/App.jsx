@@ -76,11 +76,11 @@ function App() {
     <div className="App">
       <div className="headder">
         <h1>Muusic(k)</h1>
-        </div>
+      </div>
       <div className="search-bar-container">
         <SearchBar setResults={setResults} accessToken={accessToken} />
         <SearchResultsList results={results} onAddToSpotify={handleAddToPlaylist} />
-      </div>
+      </div> 
       {playlist && (
         <div className="playlist-display">
           <h2>Playlist: {playlist.name}</h2>
@@ -96,11 +96,11 @@ function App() {
                   </div>
                 </div>
               ))
-            ) : (
+           ) : (
               <p>No tracks added yet.</p>
             )}
           </div>
-        </div>
+        </div> 
       )}
     </div>
   );
