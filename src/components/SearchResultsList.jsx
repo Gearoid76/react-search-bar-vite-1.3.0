@@ -47,13 +47,16 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
           <div className="playlist-tracks">
             {selectedTracks.map(track => (
               <div key={track.id} className="playlist-track">
-                <h3><p>{track.name}</p></h3><p>{track.artist} - {track.album}</p>
+                <div className='artistNameAndAlbum'> 
+                  <h3>{track.name}</h3>
+                  <p>{track.artist} - {track.album}</p>
+                </div>
                 <FaMinus className='minus-icon' onClick={() => handleRemoveTrack(track)} />
                 
               </div>
             ))}
           </div>
-          <button onClick={handlePushToSpotify}>Push to Spotify</button>
+          <button className="pushToSpotify.Button" onClick={handlePushToSpotify}>Push to Spotify</button>
         </div>
       )}
     </div>

@@ -1,7 +1,6 @@
 /*//src/App.css */
 .App {
   background-color: #eee;
-  height: 100vh;
   width: 100%;
   justify-content: center;
   align-items: center;
@@ -64,6 +63,7 @@ input:focus {
   justify-content: space-between;
   align-items: center;
 }
+
 .search-result:hover {
   background-color: #efefef;
 }
@@ -88,13 +88,18 @@ input:focus {
 }
 
 .playlist-container button {
-  background-color: royalblue;
+  background-color: rgb(9, 156, 6);
   color: white;
   border: none;
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
 }
+
 .playlist-display {
   margin-top: 20px;
   padding: 20px;
@@ -132,11 +137,24 @@ h1{
   background-color: orange;
   align-items: center;
   justify-content: center;
-  color: blue;
-
+  color: blue; 
 }
 
 .minus-icon {
   display: flex;
   color: royalblue;
 }
+.playlist-display {
+  display: none;
+}
+
+@media screen and (max-width: 750px) {
+  img {
+    display: none;
+  }
+  .search-result {
+    font-size: 1rem;
+  }
+  
+  
+  }

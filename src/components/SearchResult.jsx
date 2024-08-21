@@ -9,8 +9,7 @@ export const SearchResult = ({ result, onAddTrack, onRemoveTrack, isSelected }) 
       <img src={result.imageUrl} alt={result.name} style={{ width: '50px', height: '50px' }} />
       <div className="artistNameAndAlbum">
         <h3>{result.name}</h3>
-        <p>{result.artist} - {result.album}</p>
-        
+        <p>{result.artist} - {result.album}</p> 
       </div>
       <div className="track-icon" onClick={isSelected ? onRemoveTrack : onAddTrack}>
         {isSelected ? <FaMinus className='minus-icon' /> : <FaPlus className='add-icon' />}
