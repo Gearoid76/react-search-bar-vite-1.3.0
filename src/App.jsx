@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { redirectToAuthCodeFlow, getAccessToken } from './auth';
 import { SearchBar } from './components/SearchBar';
 import { SearchResultsList } from './components/SearchResultsList';
-import Footer from './components/Footer';
+//import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -103,7 +103,7 @@ function App() {
           </div>
         </div> 
       )}
-      <Footer />
+     
     </div>
     
   );
