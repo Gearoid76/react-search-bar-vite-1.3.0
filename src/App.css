@@ -159,8 +159,16 @@ h1{
     font-size: 1rem;
   }
   }
-  .pictureArtist {
-    display: flex;
-    color: white
-
+  .footer {
+    padding: 20px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #eee;
+  }
+  .footer p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #59573e;
   }

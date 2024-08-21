@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { redirectToAuthCodeFlow, getAccessToken } from './auth';
 import { SearchBar } from './components/SearchBar';
 import { SearchResultsList } from './components/SearchResultsList';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -102,10 +103,9 @@ function App() {
           </div>
         </div> 
       )}
-     <div className="pictureArtist">picture supplied by Isabella Mendes thanks</div>
+      <Footer />
     </div>
     
   );
 }
-<div className="pictureArtist">picture supplied by Isabella Mendes thanks</div>
 export default App;
