@@ -102,8 +102,10 @@ function App() {
           </div>
         </div> 
       )}
+     <div className="pictureArtist">picture supplied by Isabella Mendes thanks</div>
     </div>
+    
   );
 }
-
+<div className="pictureArtist">picture supplied by Isabella Mendes thanks</div>
 export default App;
