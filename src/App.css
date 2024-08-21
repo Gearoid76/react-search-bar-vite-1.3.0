@@ -126,6 +126,15 @@ input:focus {
 h1{
   padding: 3%;
 }
+.headder {
+  display: flex;
+  background-color: orange;
+  align-items: center;
+  justify-content: center;
+  color: blue;
+
+}
+
 .minus-icon {
   display: flex;
   color: royalblue;

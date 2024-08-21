@@ -10,7 +10,7 @@ export const SearchResult = ({ result, onAddTrack, onRemoveTrack, isSelected }) 
       <div className="artistNameAndAlbum">
         <h3>{result.name}</h3>
         <p>{result.artist} - {result.album}</p>
-        <a href={result.externalUrl} target="_blank" rel="noopener noreferrer">Listen on Spotify</a>
+        
       </div>
       <div className="track-icon" onClick={isSelected ? onRemoveTrack : onAddTrack}>
         {isSelected ? <FaMinus className='minus-icon' /> : <FaPlus className='add-icon' />}
