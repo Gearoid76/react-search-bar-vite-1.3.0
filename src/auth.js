@@ -14,14 +14,14 @@ export async function redirectToAuthCodeFlow(clientId) {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:5173/callback");
-    params.append("scope", "user-read-private user-read-email playlist-modify-public playlist-modify-private playlist-read-private ");
+    params.append("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-modify");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
     document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
-function generateCodeVerifier(length) {
+export function generateCodeVerifier(length) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -31,7 +31,7 @@ function generateCodeVerifier(length) {
     return text;
 }
 
-async function generateCodeChallenge(codeVerifier) {
+export async function generateCodeChallenge(codeVerifier) {
     const data = new TextEncoder().encode(codeVerifier);
     const digest = await window.crypto.subtle.digest('SHA-256', data);
     return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
@@ -44,6 +44,11 @@ async function generateCodeChallenge(codeVerifier) {
 export async function getAccessToken(clientId, code) {
     const verifier = localStorage.getItem("verifier");
 
+    if (!verifier) {
+        console.error("Code verifier not found");
+        return;
+    }
+
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("grant_type", "authorization_code");
@@ -51,12 +56,33 @@ export async function getAccessToken(clientId, code) {
     params.append("redirect_uri", "http://localhost:5173/callback");
     params.append("code_verifier", verifier);
 
+try {
     const result = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params
     });
 
-    const { access_token } = await result.json();
-    return access_token;
+    if (!result.ok) {
+        console.error("Error fetching access token:", result.status, result.statusText);
+        const errorResponse = await result.text();
+        console.error("Error details:", errorResponse);
+        return;
+    }
+    const data = await result.json();
+            // Log the access token and other details
+            console.log("Access Token:", data.access_token);
+            console.log("Token Type:", data.token_type);
+            console.log("Expires In:", data.expires_in);
+            console.log("Refresh Token:", data.refresh_token);
+            console.log("Scope:", data.scope);
+    
+            return data.access_token;
+        } catch (error) {
+            console.error("Error during fetch operation:", error);
+        }
+          
+        const { access_token } = await result.json();
+        return access_token;
+    
 }

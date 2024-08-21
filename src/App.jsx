@@ -26,8 +26,7 @@ function App() {
         .catch((error) => console.error("Error fetching access token:", error));
     }
   }, []);
-
-  const handleAddToPlaylist = (track, playlistName) => {
+  const handleAddToPlaylist = (tracks, playlistName) => {
     if (!accessToken) {
       console.error("No access token available");
       return;
@@ -51,6 +50,8 @@ function App() {
         const playlistId = data.id;
         setPlaylist({ id: playlistId, name: playlistName });
 
+        const uris = tracks.map(track =>`spotify:track:${track.id}`);
+
         // Add the track to the newly created playlist
         fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
           method: 'POST',
@@ -59,12 +60,12 @@ function App() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            uris: [track.externalUrl],
+            uris: uris,
           }),
         })
           .then(response => response.json())
           .then(() => {
-            setPlaylistTracks(prevTracks => [...prevTracks, track]);
+            setPlaylistTracks(tracks);
           })
           .catch(error => console.error('Error adding track to playlist:', error));
       })
@@ -79,7 +80,7 @@ function App() {
         </div>
         
         <SearchBar setResults={setResults} accessToken={accessToken} />
-        <SearchResultsList results={results} onAddToPlaylist={handleAddToPlaylist} />
+        <SearchResultsList results={results} onAddToSpotify={handleAddToPlaylist} />
       </div>
       {playlist && (
         <div className="playlist-display">

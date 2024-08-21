@@ -33,7 +33,8 @@ export const SearchBar = ({ setResults, accessToken }) => {
             artist: track.artists[0].name,
             album: track.album.name,
             imageUrl: track.album.images[0]?.url,
-            externalUrl: track.external_urls.spotify
+            externalUrl: track.external_urls.spotify,
+            spotifyUri: track.uri
           }));
           setResults(results);
         }

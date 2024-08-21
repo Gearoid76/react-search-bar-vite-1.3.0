@@ -21,7 +21,7 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
       setSelectedTracks([]); // Clear selected tracks after pushing to Spotify
     }
   };
-
+  
   return (
     <div className='results-list'>
       {results.map((result, id) => (
@@ -47,6 +47,7 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
             {selectedTracks.map(track => (
               <div key={track.id} className="playlist-track">
                 <h3><p>{track.name}</p></h3><p>{track.artist} - {track.album}</p>
+                
                 <button onClick={() => handleRemoveTrack(track)}>-</button>
               </div>
             ))}
