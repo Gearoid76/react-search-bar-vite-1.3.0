@@ -118,6 +118,7 @@ input:focus {
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
+  justify-content: space-between;
 }
 
 .playlist-track img {
