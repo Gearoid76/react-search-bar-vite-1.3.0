@@ -74,11 +74,10 @@ function App() {
 
   return (
     <div className="App">
-      <div className="search-bar-container">
-        <div className="headder">
+      <div className="headder">
         <h1>Muusic(k)</h1>
         </div>
-        
+      <div className="search-bar-container">
         <SearchBar setResults={setResults} accessToken={accessToken} />
         <SearchResultsList results={results} onAddToSpotify={handleAddToPlaylist} />
       </div>
