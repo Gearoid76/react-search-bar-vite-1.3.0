@@ -10,10 +10,10 @@ export async function redirectToAuthCodeFlow(clientId) {
         return base62Pattern.test(id);
     }
     const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
-    const client_id = import.meta.env.VITE_CLIENT_ID;
+    const clientId = import.meta.env.VITE_CLIENT_ID;
 
     const params = new URLSearchParams();
-    params.append("client_id", client_id);
+    params.append("clientId", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", redirect_uri);
     params.append("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-modify");
@@ -45,6 +45,7 @@ export async function generateCodeChallenge(codeVerifier) {
 
 export async function getAccessToken(clientId, clientSecret, code) {
     const verifier = localStorage.getItem("verifier");
+    const clientSecret = import.meta.VITE_CLIENT_SECRET;
 
     if (!verifier) {
         console.error("Code verifier not found");
@@ -52,8 +53,8 @@ export async function getAccessToken(clientId, clientSecret, code) {
     }
 
     const params = new URLSearchParams();
-    params.append("client_id", clientId);
-    params.append("client_secret", clientSecret)
+    params.append("clientId", clientId);
+    params.append(clientSecret, )
     params.append("grant_type", "authorization_code");
     params.append("code", code);
     params.append("redirect_uri", "https://react-search-bar-vite-130.netlify.app//callback");
