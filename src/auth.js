@@ -54,7 +54,7 @@ export async function getAccessToken(clientId, clientSecret, code) {
     params.append("client_secret", clientSecret)
     params.append("grant_type", "authorization_code");
     params.append("code", code);
-    params.append("redirect_uri", "https://react-search-bar-vite-130.netlify.app/callback");
+    params.append("redirect_uri", "https://react-search-bar-vite-130.netlify.app//callback");
     params.append("code_verifier", verifier);
 
 try {
