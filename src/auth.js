@@ -41,7 +41,7 @@ export async function generateCodeChallenge(codeVerifier) {
 }
 
 
-export async function getAccessToken(clientId, code) {
+export async function getAccessToken(clientId, clientSecret, code) {
     const verifier = localStorage.getItem("verifier");
 
     if (!verifier) {
