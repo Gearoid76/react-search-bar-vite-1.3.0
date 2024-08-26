@@ -9,11 +9,13 @@ export async function redirectToAuthCodeFlow(clientId) {
         const base62Pattern = /^[A-Za-z0-9]+$/;
         return base62Pattern.test(id);
     }
+    const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
+    const client_id = import.meta.env.VITE_CLIENT_ID;
 
     const params = new URLSearchParams();
-    params.append("client_id", clientId);
+    params.append("client_id", client_id);
     params.append("response_type", "code");
-    params.append("redirect_uri", "https://react-search-bar-vite-130.netlify.app/");
+    params.append("redirect_uri", redirect_uri);
     params.append("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-modify");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
