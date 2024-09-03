@@ -41,7 +41,6 @@ export async function generateCodeChallenge(codeVerifier) {
         .replace(/=+$/, '');
 }
 
-
 export async function getAccessToken(clientId, clientSecret, code) {
     const verifier = localStorage.getItem("verifier");
     const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
@@ -82,10 +81,5 @@ try {
     
             return data.access_token;
         } catch (error) {
-            console.error("Error during fetch operation:", error);
-        }
-          
-        const { access_token } = await result.json();
-        return access_token;
-    
+            console.error("Error during fetch operation:", error);    }
 }
