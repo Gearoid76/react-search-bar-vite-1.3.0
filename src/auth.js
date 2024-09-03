@@ -1,19 +1,19 @@
 //src/auth.js
+
+const clientSecret = import.meta.env.VITE_CLIENT_SECRET
+const redirect_uri = import.meta.env.VITE_REDIRECT_URI
+
 export async function redirectToAuthCodeFlow(clientId) {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
     localStorage.setItem("verifier", verifier);
 
-    function isValidBase62(id) {
-        const base62Pattern = /^[A-Za-z0-9]+$/;
-        return base62Pattern.test(id);
-    }
     const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
 
     const params = new URLSearchParams();
-    params.append("client_id", clientId); // was clientId
-    params.append("response_type", "code");
+    params.append("client_id", clientId);
+    params.append("response_type", "code");  
     params.append("redirect_uri", redirect_uri);
     params.append("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-modify");
     params.append("code_challenge_method", "S256");
@@ -21,6 +21,7 @@ export async function redirectToAuthCodeFlow(clientId) {
 
     document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
+
 
 export function generateCodeVerifier(length) {
     let text = '';
@@ -44,6 +45,7 @@ export async function generateCodeChallenge(codeVerifier) {
 
 export async function getAccessToken(clientId, clientSecret, code) {
     const verifier = localStorage.getItem("verifier");
+    const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
 
     if (!verifier) {
         console.error("Code verifier not found");
@@ -52,7 +54,7 @@ export async function getAccessToken(clientId, clientSecret, code) {
 
     const params = new URLSearchParams();
     params.append("clientId", clientId);
-    params.append(clientSecret, )
+    params.append("clientSecret", clientSecret)
     params.append("grant_type", "authorization_code");
     params.append("code", code);
     params.append("redirect_uri", redirect_uri);
@@ -62,7 +64,7 @@ try {
     const result = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params
+        body: params.toString(),
     });
 
     if (!result.ok) {
