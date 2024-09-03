@@ -12,7 +12,7 @@ export async function redirectToAuthCodeFlow(clientId) {
     const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
 
     const params = new URLSearchParams();
-    params.append("clientId", clientId);
+    params.append("client_id", clientId); // was clientId
     params.append("response_type", "code");
     params.append("redirect_uri", redirect_uri);
     params.append("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-modify");
