@@ -52,8 +52,8 @@ export async function getAccessToken(clientId, clientSecret, code) {
     }
 
     const params = new URLSearchParams();
-    params.append("clientId", clientId);
-    params.append("clientSecret", clientSecret)
+    params.append("client_id", clientId);
+    //params.append("client_secret", clientSecret);
     params.append("grant_type", "authorization_code");
     params.append("code", code);
     params.append("redirect_uri", redirect_uri);
