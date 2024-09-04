@@ -1,6 +1,5 @@
 //src/auth.js
-
-const clientSecret = import.meta.env.VITE_CLIENT_SECRET
+const client_secret = import.meta.env.VITE_CLIENT_SECRET
 const redirect_uri = import.meta.env.VITE_REDIRECT_URI
 
 export async function redirectToAuthCodeFlow(clientId) {
@@ -51,35 +50,42 @@ export async function getAccessToken(clientId, clientSecret, code) {
     }
 
     const params = new URLSearchParams();
-    params.append("client_id", clientId);
-    //params.append("client_secret", clientSecret);
     params.append("grant_type", "authorization_code");
     params.append("code", code);
     params.append("redirect_uri", redirect_uri);
-    params.append("code_verifier", verifier);
+    params.append("client_secret", clientSecret);
+    params.append("client_id", clientId);
+    //params.append("code_verifier", verifier);
+
+    const authString = `${clientId}:${clientSecret}`;
+    const authHeader = `Basic ${btoa(authString)}`;
 
 try {
     const result = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString(),
+        body:  'grant_type=client_cridentials&client_id='+clientId+'&client_secret='+client_secret,
+        headers: { 
+            "Content-Type": "application/x-www-form-urlencoded" 
+        },
+       
     });
 
-    if (!result.ok) {
-        console.error("Error fetching access token:", result.status, result.statusText);
-        const errorResponse = await result.text();
-        console.error("Error details:", errorResponse);
-        return;
+        if (!result.ok) {
+            console.error("Error fetching access token:", result.status, result.statusText);
+            const errorResponse = await result.text();
+            console.error("Error details:", errorResponse);
+            return;
+        }
+
+        const data = await result.json();
+        console.log("Access Token:", data.access_token);
+        console.log("Token Type:", data.token_type);
+        console.log("Expires In:", data.expires_in);
+        console.log("Refresh Token:", data.refresh_token);
+        console.log("Scope:", data.scope);
+
+        return data.access_token;
+    } catch (error) {
+        console.error("Error during fetch operation:", error);
     }
-    const data = await result.json();
-            // Log the access token and other details
-            console.log("Access Token:", data.access_token);
-            console.log("Token Type:", data.token_type);
-            console.log("Expires In:", data.expires_in);
-            console.log("Refresh Token:", data.refresh_token);
-            console.log("Scope:", data.scope);
-    
-            return data.access_token;
-        } catch (error) {
-            console.error("Error during fetch operation:", error);    }
 }
