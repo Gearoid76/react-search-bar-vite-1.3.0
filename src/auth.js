@@ -1,6 +1,25 @@
 //src/auth.js
-const client_secret = import.meta.env.VITE_CLIENT_SECRET
-const redirect_uri = import.meta.env.VITE_REDIRECT_URI
+const client_secret = import.meta.env.VITE_CLIENT_SECRET;
+const client_id = import.meta.env.VITE_CLIENT_ID;
+
+const code = new URLSearchParams(window.location.search).get('code');
+
+if (code) {
+    getAccessToken(client_id, client_secret, code).then(accessToken => {
+        if (accessToken) {
+            console.log("Successfully obtained access token:", accessToken);
+            fetch('https://api.spotify.com/v1/me', {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+            localStorage.setItem("Access Token:",accessToken);
+        }
+    });
+}
 
 export async function redirectToAuthCodeFlow(clientId) {
     const verifier = generateCodeVerifier(128);
@@ -12,7 +31,7 @@ export async function redirectToAuthCodeFlow(clientId) {
 
     const params = new URLSearchParams();
     params.append("client_id", clientId);
-    params.append("response_type", "code");  
+    params.append("response_type", "code");
     params.append("redirect_uri", redirect_uri);
     params.append("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-modify");
     params.append("code_challenge_method", "S256");
@@ -23,7 +42,7 @@ export async function redirectToAuthCodeFlow(clientId) {
 
 export function generateCodeVerifier(length) {
     let text = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     for (let i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -48,27 +67,22 @@ export async function getAccessToken(clientId, clientSecret, code) {
         console.error("Code verifier not found");
         return;
     }
-
-    const params = new URLSearchParams();
+    // this was in the original tutorial thought it would help me get my access_token
+    const params = new URLSearchParams();  
     params.append("grant_type", "authorization_code");
     params.append("code", code);
     params.append("redirect_uri", redirect_uri);
-    params.append("client_secret", clientSecret);
     params.append("client_id", clientId);
-    //params.append("code_verifier", verifier);
+    params.append("code_verifier", verifier);
 
-    const authString = `${clientId}:${clientSecret}`;
-    const authHeader = `Basic ${btoa(authString)}`;
-
-try {
-    const result = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
-        body:  'grant_type=client_cridentials&client_id='+clientId+'&client_secret='+client_secret,
-        headers: { 
-            "Content-Type": "application/x-www-form-urlencoded" 
-        },
-       
-    });
+    try {
+        const result = await fetch("https://accounts.spotify.com/api/token", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params.toString(),
+        });
 
         if (!result.ok) {
             console.error("Error fetching access token:", result.status, result.statusText);
@@ -78,7 +92,7 @@ try {
         }
 
         const data = await result.json();
-        console.log("Access Token:", data.access_token);
+        console.log("data.Access Token:", data.access_token);
         console.log("Token Type:", data.token_type);
         console.log("Expires In:", data.expires_in);
         console.log("Refresh Token:", data.refresh_token);
