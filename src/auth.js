@@ -2,8 +2,10 @@
 import axios from 'axios'
 const client_secret = import.meta.env.VITE_CLIENT_SECRET;
 const client_id = import.meta.env.VITE_CLIENT_ID;
+const redirectUri = import.meta.env.VITE_REDIRECT_URI;
 const code = new URLSearchParams(window.location.search).get('code');
 const authEndpoint = 'https://accounts.spotify.com/api/token';
+
 
 if (code) {
     getAccessToken(client_id, client_secret, code).then(accessToken => {
@@ -17,7 +19,7 @@ if (code) {
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.error('Error:', error));
-            localStorage.setItem("Access2 Token:",accessToken);
+            localStorage.setItem("Access Token:",accessToken);
         }
     });
 }
@@ -28,12 +30,12 @@ export async function redirectToAuthCodeFlow(clientId) {
 
     localStorage.setItem("verifier", verifier);
 
-    const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
+    const redirectUri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
 
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("response_type", "code");
-    params.append("redirect_uri", redirect_uri);
+    params.append("redirect_uri", redirectUri); 
     params.append("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-modify");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
@@ -62,46 +64,35 @@ export async function generateCodeChallenge(codeVerifier) {
 
 export async function getAccessToken(clientId, clientSecret, code) {
     const verifier = localStorage.getItem("verifier");
-    const redirect_uri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
-
+    const redirectUri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
     if (!verifier) {
-        console.error("Code verifier not found");
+        console.error("Code verifier not found")
+        }{
         console.log("this is the verifier", verifier);
         return;
     }
-    // this was in the original tutorial thought it would help me get my access_token
     const params = new URLSearchParams();  
     params.append("client_id", clientId);
+    params.append("code", code);
     params.append("client_secret", clientSecret);
     params.append("grant_type", "authorization_code");
-    params.append("redirect_uri", redirect_uri);
-    params.append("code", code);
+    params.append("redirect_uri", redirectUri);
     params.append("code_verifier", verifier);
+
+    console.log('Request params:', params.toString());
+    console.log('----BREAK----- ')
+    console.log('Client Secret:', clientSecret);
+    console.log('Client ID:', clientId);
+
 
 
     try {
-        const result = await axios.post(authEndpoint, null, {
+        const result = await axios.post(authEndpoint, params, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`
-            },
-            params: {
-                grant_type: 'client_credentials'
             }
         });
         return result.data.access_token;
-
-        //const result = await fetch("https://accounts.spotify.com/api/token", null {
-            //method: "POST",
-            //headers: {
-            //    'Content-Type': 'application/x-www-form-urlencoded',
-            //    'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`
-            //},
-            //params: {
-            //    grant_type: 'client_credentials'
-            //  }
-        //});
-        //return result.data.access_token;
 
         if (!result.ok) {
             console.error("Error fetching access token:", result.status, result.statusText);
@@ -119,6 +110,11 @@ export async function getAccessToken(clientId, clientSecret, code) {
 
         return data.access_token;
     } catch (error) {
-        console.error("Error during fetch operation:", error);
+        if (error.response) {
+            console.error('Error response:', error.response.data);
+        } else {
+            console.error('Error during fetch operation:', error);
+        }
+        
     }
-}
+} 
