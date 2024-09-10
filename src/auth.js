@@ -1,8 +1,9 @@
 //src/auth.js
+import axios from 'axios'
 const client_secret = import.meta.env.VITE_CLIENT_SECRET;
 const client_id = import.meta.env.VITE_CLIENT_ID;
-
 const code = new URLSearchParams(window.location.search).get('code');
+const authEndpoint = 'https://accounts.spotify.com/api/token';
 
 if (code) {
     getAccessToken(client_id, client_secret, code).then(accessToken => {
@@ -16,7 +17,7 @@ if (code) {
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.error('Error:', error));
-            localStorage.setItem("Access Token:",accessToken);
+            localStorage.setItem("Access2 Token:",accessToken);
         }
     });
 }
@@ -65,24 +66,42 @@ export async function getAccessToken(clientId, clientSecret, code) {
 
     if (!verifier) {
         console.error("Code verifier not found");
+        console.log("this is the verifier", verifier);
         return;
     }
     // this was in the original tutorial thought it would help me get my access_token
     const params = new URLSearchParams();  
-    params.append("grant_type", "authorization_code");
-    params.append("code", code);
-    params.append("redirect_uri", redirect_uri);
     params.append("client_id", clientId);
+    params.append("client_secret", clientSecret);
+    params.append("grant_type", "authorization_code");
+    params.append("redirect_uri", redirect_uri);
+    params.append("code", code);
     params.append("code_verifier", verifier);
 
+
     try {
-        const result = await fetch("https://accounts.spotify.com/api/token", {
-            method: "POST",
+        const result = await axios.post(authEndpoint, null, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`
             },
-            body: params.toString(),
+            params: {
+                grant_type: 'client_credentials'
+            }
         });
+        return result.data.access_token;
+
+        //const result = await fetch("https://accounts.spotify.com/api/token", null {
+            //method: "POST",
+            //headers: {
+            //    'Content-Type': 'application/x-www-form-urlencoded',
+            //    'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`
+            //},
+            //params: {
+            //    grant_type: 'client_credentials'
+            //  }
+        //});
+        //return result.data.access_token;
 
         if (!result.ok) {
             console.error("Error fetching access token:", result.status, result.statusText);
