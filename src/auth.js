@@ -11,7 +11,6 @@ export async function redirectToAuthCodeFlow(clientId) {
     const challenge = await generateCodeChallenge(verifier);
 
     localStorage.setItem("verifier", verifier);                         //localStorage verifier
-
     const redirectUri = import.meta.env.VITE_REDIRECT_URI;
     console.log("redirect_uri", redirectUri);
 
@@ -45,7 +44,7 @@ export async function generateCodeChallenge(codeVerifier) {
         .replace(/=+$/, '');
 }
 
-export async function getAccessToken(clientId, clientSecret, code) {
+export async function getAccessToken(clientId, clientSecret) {
     const verifier = localStorage.getItem("verifier");
     const redirectUri = import.meta.env.VITE_REDIRECT_URI 
     const saved_code = localStorage.getItem('auth_code'); 
