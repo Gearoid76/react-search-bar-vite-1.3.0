@@ -1,5 +1,6 @@
 // src/components/SearchBar.jsx
 import React, { useState, useEffect } from 'react';
+import { getAccessToken } from '../auth';
 import { FaSearch } from 'react-icons/fa';
 import '../App.css';
 export const SearchBar = ({ setResults, accessToken }) => {

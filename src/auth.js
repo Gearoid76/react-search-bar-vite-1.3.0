@@ -45,48 +45,33 @@ export async function generateCodeChallenge(codeVerifier) {
         .replace(/=+$/, '');
 }
 
-export async function getAccessToken(clientId, clientSecret) {
+export async function getAccessToken() {
+    const clientId = client_id;
+    const clientSecret = client_secret;
+    const auth_code = localStorage.getItem('auth_code');
+    const redirectUri = import.meta.env.VITE_REDIRECT_URI
     const verifier = localStorage.getItem("verifier");
-    const redirectUri = import.meta.env.VITE_REDIRECT_URI 
-    const saved_code = localStorage.getItem('auth_code'); 
-
+     
     const params = new URLSearchParams();  
     params.append("client_id", clientId);
-    params.append("code", saved_code);                           
-    //params.append("client_secret", clientSecret); 
+    params.append("client_secret",clientSecret);
     params.append("grant_type", "authorization_code");
+    params.append("code", auth_code);                           
     params.append("redirect_uri", redirectUri);
     params.append("code_verifier", verifier);
 
-    console.log('Request params:', params.toString());
-    console.log('code', saved_code);                              
-    console.log('Client_secret', clientSecret); 
-    console.log('Client_id:', clientId);
-
     try {
-        const result = await axios.post(authEndpoint, params, {
+        const response = await axios.post(authEndpoint, params.toString(), {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         });
 
-        console.log("Access Token", result.data.access_token);
-        return result.access_token;
-
-            const data = await result.json();
-            console.log("data.Access Token:", result.data.access_token);
-            console.log("Token Type:", result.data.token_type);
-            console.log("Expires In:", data.expires_in);
-            console.log("Refresh Token:", data.refresh_token);
-            console.log("Scope:", data.scope);
-    
-            return data.access_token;
+        console.log("Access Token", response.data.access_token);
+        sessionStorage.setItem('Access Token', response.data.access_token);
+        return response.data.access_token;
 
         } catch (error) {
-            if (error.response) {
-                console.error('Error response:', error.response.data);
-            } else {
-                console.error('Error during fetch operation:', error);
-            }
+            console.error('Error fetching token:', error.response ? error.response.data : error.message);
         }
     }
