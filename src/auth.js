@@ -1,10 +1,11 @@
 //src/auth.js
 import axios from 'axios'
+
 const client_secret = import.meta.env.VITE_CLIENT_SECRET;
 const client_id = import.meta.env.VITE_CLIENT_ID;
+const authEndpoint = 'https://accounts.spotify.com/api/token';
 const code = new URLSearchParams(window.location.search).get('code');
 localStorage.setItem('auth_code', code);
-const authEndpoint = 'https://accounts.spotify.com/api/token';
 
 export async function redirectToAuthCodeFlow(clientId) {
     const verifier = generateCodeVerifier(128);
