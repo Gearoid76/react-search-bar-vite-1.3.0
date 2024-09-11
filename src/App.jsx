@@ -12,6 +12,7 @@ function App() {
   const [playlist, setPlaylist] = useState(null); // Store the playlist details
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
+
   useEffect(() => {
     const clientId = import.meta.env.VITE_CLIENT_ID;
     const params = new URLSearchParams(window.location.search);
