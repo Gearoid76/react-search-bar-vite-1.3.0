@@ -20,11 +20,11 @@ export const SearchBar = ({ setResults, accessToken }) => {
       console.error("No access token available");
       return;
     }
-    const hardcodedAccessToken = "BQDw6fPlZi_3B-LD0c_sGOd-VfyZryuRRB6jcn3CZZEULOjNNHQAvbmYSk4XihHZEbOEzsOyWczLmjleKdDyyM7XchgBIGWyW6Gd3INfFMrqy9UtaYMllBvgMT9RA9bmZLZxVo6ux2PEh3FOgqdVY0dN1wPt200ML956VrWxSABpBLX_LFqvebW2bPNsnhTstPBJn8rE9ivCo70Z4_YDvwzTli9VistGLxgHuwdFweVzVVsvq9VZy2UeI_QZZxSfyKGu1i-2b6l7aDxOU4ec";
+   
     const query = encodeURIComponent(value);
     fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=10`, {
       headers: {
-        Authorization: `Bearer ${hardcodedAccessToken}`
+        Authorization: `Bearer ${accessToken}`
       }
     })
       .then((response) => response.json())
