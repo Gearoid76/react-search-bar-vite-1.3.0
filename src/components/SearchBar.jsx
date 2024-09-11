@@ -4,19 +4,18 @@ import { FaSearch } from 'react-icons/fa';
 import '../App.css';
 export const SearchBar = ({ setResults, accessToken }) => {
   const [input, setInput] = useState("");
-  console.log("access_token", accessToken);
 
   useEffect(() => {
     console.log('Input at value:', input);
     if (accessToken) {
       console.log("Access Token Available:", accessToken); // Debugging line
     }else {
-      console.error("Access token missing");
+     // console.error("Access token missing");
     }
   }, [accessToken]);
 
   const fetchData = (value) => {
-    console.log("Fetching data for:", value); // Debugging line
+    console.log("Fetching data for:", value); 
     if (!accessToken) {
       console.error("No access token available");
       return;
@@ -63,7 +62,7 @@ export const SearchBar = ({ setResults, accessToken }) => {
         placeholder='Type to search..'
         value={input}
         onChange={(e) => handleChange(e.target.value)}
-        //disabled={!accessToken} // Disable input if no access token is available
+        disabled={!accessToken} // Disable input if no access token is available
       />
       <FaSearch id="search-icon" />
     </div>

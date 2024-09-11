@@ -2,35 +2,18 @@
 import axios from 'axios'
 const client_secret = import.meta.env.VITE_CLIENT_SECRET;
 const client_id = import.meta.env.VITE_CLIENT_ID;
-const redirectUri = import.meta.env.VITE_REDIRECT_URI;
 const code = new URLSearchParams(window.location.search).get('code');
+localStorage.setItem('auth_code', code);
 const authEndpoint = 'https://accounts.spotify.com/api/token';
-
-
-if (code) {
-    getAccessToken(client_id, client_secret, code).then(accessToken => {
-        if (accessToken) {
-            console.log("Successfully obtained access token:", accessToken);
-            fetch('https://api.spotify.com/v1/me', {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
-            localStorage.setItem("Access Token:",accessToken);
-        }
-    });
-}
 
 export async function redirectToAuthCodeFlow(clientId) {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
-    localStorage.setItem("verifier", verifier);
+    localStorage.setItem("verifier", verifier);                         //localStorage verifier
 
-    const redirectUri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
+    const redirectUri = import.meta.env.VITE_REDIRECT_URI;
+    console.log("redirect_uri", redirectUri);
 
     const params = new URLSearchParams();
     params.append("client_id", clientId);
@@ -64,27 +47,21 @@ export async function generateCodeChallenge(codeVerifier) {
 
 export async function getAccessToken(clientId, clientSecret, code) {
     const verifier = localStorage.getItem("verifier");
-    const redirectUri = import.meta.env.VITE_REDIRECT_URI || "http://localhost:5173/callback";
-    if (!verifier) {
-        console.error("Code verifier not found")
-        }{
-        console.log("this is the verifier", verifier);
-        return;
-    }
+    const redirectUri = import.meta.env.VITE_REDIRECT_URI 
+    const saved_code = localStorage.getItem('auth_code'); 
+
     const params = new URLSearchParams();  
     params.append("client_id", clientId);
-    params.append("code", code);
-    params.append("client_secret", clientSecret);
+    params.append("code", saved_code);                           
+    //params.append("client_secret", clientSecret); 
     params.append("grant_type", "authorization_code");
     params.append("redirect_uri", redirectUri);
     params.append("code_verifier", verifier);
 
     console.log('Request params:', params.toString());
-    console.log('----BREAK----- ')
-    console.log('Client Secret:', clientSecret);
-    console.log('Client ID:', clientId);
-
-
+    console.log('code', saved_code);                              
+    console.log('Client_secret', clientSecret); 
+    console.log('Client_id:', clientId);
 
     try {
         const result = await axios.post(authEndpoint, params, {
@@ -92,29 +69,24 @@ export async function getAccessToken(clientId, clientSecret, code) {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
         });
-        return result.data.access_token;
 
-        if (!result.ok) {
-            console.error("Error fetching access token:", result.status, result.statusText);
-            const errorResponse = await result.text();
-            console.error("Error details:", errorResponse);
-            return;
+        console.log("Access Token", result.data.access_token);
+        return result.access_token;
+
+            const data = await result.json();
+            console.log("data.Access Token:", result.data.access_token);
+            console.log("Token Type:", result.data.token_type);
+            console.log("Expires In:", data.expires_in);
+            console.log("Refresh Token:", data.refresh_token);
+            console.log("Scope:", data.scope);
+    
+            return data.access_token;
+
+        } catch (error) {
+            if (error.response) {
+                console.error('Error response:', error.response.data);
+            } else {
+                console.error('Error during fetch operation:', error);
+            }
         }
-
-        const data = await result.json();
-        console.log("data.Access Token:", data.access_token);
-        console.log("Token Type:", data.token_type);
-        console.log("Expires In:", data.expires_in);
-        console.log("Refresh Token:", data.refresh_token);
-        console.log("Scope:", data.scope);
-
-        return data.access_token;
-    } catch (error) {
-        if (error.response) {
-            console.error('Error response:', error.response.data);
-        } else {
-            console.error('Error during fetch operation:', error);
-        }
-        
     }
-} 
