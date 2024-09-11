@@ -38,7 +38,7 @@ export function App() {
     fetch('https://api.spotify.com/v1/me/playlists', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${hardcodedAccessToken}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
