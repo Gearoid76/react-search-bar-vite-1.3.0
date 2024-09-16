@@ -10,7 +10,7 @@ export const SearchBar = ({ setResults, accessToken }) => {
     console.log('Input at value:', input);
     if (accessToken) {
       console.log("Access Token Available:", accessToken); // Debugging line
-    }else {
+    } else {
      // console.error("Access token missing");
     }
   }, [accessToken]);
