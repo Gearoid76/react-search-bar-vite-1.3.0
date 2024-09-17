@@ -56,12 +56,8 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
               </div>
             ))}
           </div>
-            <div className='popup' onClick='myFunctionPopup()'>
-              <button className="pushToSpotify.Button" onClick={handlePushToSpotify}>Push to Spotify</button>
-              <span className='popuptext' id='myPopup'> The playlist has been sent to spodify
-              </span>
+              <button className="pushToSpotify.Button" onClick={handlePushToSpotify}>Push to Spotify</button>  
             </div>
-        </div>
       )}
     </div>
   );

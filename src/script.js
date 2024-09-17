@@ -7,11 +7,7 @@ if (!code) {
     redirectToAuthCodeFlow(clientId);
 } else {
     const accessToken = await getAccessToken(clientId, code);
-  //  const profile = await fetchProfile(accessToken);
-  //  populateUI(profile);
 }
-// all ok above the line
-
 
 async function fetchProfile(token) {
     const result = await fetch("https://api.spotify.com/v1/me", {

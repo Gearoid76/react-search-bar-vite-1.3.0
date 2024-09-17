@@ -7,9 +7,9 @@ import { SearchResultsList } from './components/SearchResultsList';
 import './App.css';
 
 export function App() {
-  const [accessToken, setAccessToken] = useState(''); // was null 
+  const [accessToken, setAccessToken] = useState(''); 
   const [results, setResults] = useState([]);
-  const [playlist, setPlaylist] = useState(null); // Store the playlist details
+  const [playlist, setPlaylist] = useState(null); 
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
 
@@ -38,7 +38,7 @@ export function App() {
     fetch('https://api.spotify.com/v1/me/playlists', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

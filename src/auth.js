@@ -11,7 +11,7 @@ export async function redirectToAuthCodeFlow(clientId) {
     const verifier = generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
-    localStorage.setItem("verifier", verifier);                         //localStorage verifier
+    localStorage.setItem("verifier", verifier);                        
     const redirectUri = import.meta.env.VITE_REDIRECT_URI;
     console.log("redirect_uri", redirectUri);
 
@@ -62,6 +62,7 @@ export async function getAccessToken() {
 
     try {
         const response = await axios.post(authEndpoint, params.toString(), {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
