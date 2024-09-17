@@ -7,6 +7,7 @@ import '../App.css';
 export const SearchResultsList = ({ results, onAddToSpotify }) => {
   const [selectedTracks, setSelectedTracks] = useState([]);
   const [playlistName, setPlaylistName] = useState('Created from Muusic(k)');
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleAddTrack = (track) => {
     setSelectedTracks((prevTracks) => [...prevTracks, track]);
@@ -18,10 +19,23 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
 
   const handlePushToSpotify = () => {
     if (playlistName.trim() && selectedTracks.length > 0) {
-      onAddToSpotify(selectedTracks, playlistName);
-      setSelectedTracks([]); // Clear selected tracks after pushing to Spotify
+      onAddToSpotify(selectedTracks, playlistName)
+      .then(() => {
+        setShowPopup(true);
+        setSelectedTracks([]); // Clear selected tracks after pushing to Spotify
+      })
+      .catch((error) => {
+        console.error('Error pushing to Spotify:', error);
+      });
     }
   };
+
+  React.useEffect(() => {
+    if (showPopup) {
+      const timer = setTimeout(() => setShowPopup(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showPopup]);
   
   return (
     <div className='results-list'>
@@ -56,7 +70,16 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
               </div>
             ))}
           </div>
-              <button className="pushToSpotify.Button" onClick={handlePushToSpotify}>Push to Spotify</button>  
+              <button className="pushToSpotify.Button" onClick={handlePushToSpotify}>
+                Push to Spotify
+              </button>
+
+              {/* Popup notification */}
+              {showPopup && (
+              <div className="popup-notification">
+                Playlist has been pushed to Spotify
+                </div>
+            )}  
             </div>
       )}
     </div>

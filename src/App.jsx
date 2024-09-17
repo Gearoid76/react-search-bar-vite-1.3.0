@@ -32,10 +32,11 @@ export function App() {
   const handleAddToPlaylist = (tracks, playlistName) => {
     if (!accessToken) {
       console.error("No access token available");
-      return;
+      return Promise.reject(new Error("No access token available")); // Return rejected Promise
     }
+  
     // Create a new playlist
-    fetch('https://api.spotify.com/v1/me/playlists', {
+    return fetch('https://api.spotify.com/v1/me/playlists', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -51,11 +52,11 @@ export function App() {
       .then(data => {
         const playlistId = data.id;
         setPlaylist({ id: playlistId, name: playlistName });
-
-        const uris = tracks.map(track =>`spotify:track:${track.id}`);
-
-        // Add the track to the newly created playlist
-        fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+  
+        const uris = tracks.map(track => `spotify:track:${track.id}`);
+  
+        // Add the tracks to the newly created playlist
+        return fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -68,11 +69,16 @@ export function App() {
           .then(response => response.json())
           .then(() => {
             setPlaylistTracks(tracks);
-          })
-          .catch(error => console.error('Error adding track to playlist:', error));
+            return Promise.resolve();
+          });
       })
-      .catch(error => console.error('Error creating playlist:', error));
+      .catch(error => {
+        console.error('Error creating or adding tracks to playlist:', error);
+        return Promise.reject(error);
+      });
   };
+  
+
 
   return (
     <div className="App">
