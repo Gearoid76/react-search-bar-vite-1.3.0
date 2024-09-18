@@ -214,3 +214,13 @@ h1{
   .popup-notification.hidden {
     opacity: 0;
   }
+  .popup-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(230, 26, 26, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000; /* Make sure it's on top of other elements */
+}

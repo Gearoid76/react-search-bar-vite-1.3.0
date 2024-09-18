@@ -31,8 +31,9 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
   };
 
   React.useEffect(() => {
+    console.log('Popup visibility:', showPopup);
     if (showPopup) {
-      const timer = setTimeout(() => setShowPopup(false), 3000);
+      const timer = setTimeout(() => setShowPopup(false), 8000);
       return () => clearTimeout(timer);
     }
   }, [showPopup]);
@@ -73,7 +74,6 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
               <button className="pushToSpotify.Button" onClick={handlePushToSpotify}>
                 Push to Spotify
               </button>
-
               {/* Popup notification */}
               {showPopup && (
               <div className="popup-notification">
