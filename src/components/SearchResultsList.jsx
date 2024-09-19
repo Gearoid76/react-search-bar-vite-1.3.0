@@ -21,6 +21,7 @@ export const SearchResultsList = ({ results, onAddToSpotify }) => {
     if (playlistName.trim() && selectedTracks.length > 0) {
       onAddToSpotify(selectedTracks, playlistName)
       .then(() => {
+        console.log("Tracks successfully pushed to Spodify");
         setShowPopup(true);
         setSelectedTracks([]); // Clear selected tracks after pushing to Spotify
       })
