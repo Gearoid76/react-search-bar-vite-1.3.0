@@ -12,11 +12,15 @@
     </div>
     <script  src="/src/main.jsx" type="module"></script> 
     <script>
-      // When the user clicks on div, open the popup
-      function myFunction() {
-        var popup = document.getElementById("myPopup");
-        popup.classList.toggle("show");
-      }
+      
+        (() => {
+          const redirect = sessionStorage.redirect;
+          delete sessionStorage.redirect;
+          if (redirect && redirect !== location.href) {
+            history.replaceState(null, null, redirect);
+          }
+        })();
       </script>
   </body>
 </html>
+
