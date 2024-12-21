@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { redirectToAuthCodeFlow, getAccessToken } from './auth';
 import { SearchBar } from './components/SearchBar';
 import { SearchResultsList } from './components/SearchResultsList';
 import CallbackPage from './components/CallbackPage';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+
 import './App.css';
 
 export function App() {
@@ -72,7 +73,10 @@ export function App() {
     <Router>
       <div className="App">
         <Routes>
-          {/* Route for Callback Page */}
+         <Route 
+            path="/" 
+            element={<HomePage/>} 
+            />
           <Route
             path="/callback"
             element={

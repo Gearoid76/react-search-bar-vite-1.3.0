@@ -1,13 +1,14 @@
 {
-  "name": "react-search-bar-vite",
+  "name": "react-search-bar-vite-1.3.0",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://gearoid76.github.io/react-search-bar-vite-1.3.0/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "vite build && vite-gh-pages",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -33,7 +34,6 @@
   },
   "repository": {
   "type": "git",
-  "url": "https://github.com/your-username/your-repo-name.git"
+  "url": "https://github.com/react-search-bar-vite-1.3.0/index.html"
 }
-
 }
