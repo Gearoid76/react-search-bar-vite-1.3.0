@@ -4,7 +4,6 @@ import { SearchBar } from './components/SearchBar';
 import { SearchResultsList } from './components/SearchResultsList';
 import CallbackPage from './components/CallbackPage';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import { HomePage } from './components/HomePage';
 
 import './App.css';
 
@@ -74,10 +73,10 @@ export function App() {
     <Router>
       <div className="App">
         <Routes>
-         <Route 
+        {/* <Route 
             path="/" 
             element={<HomePage/>} 
-            />
+            /> I dont need this page  */} 
           <Route
             path="/callback"
             element={
