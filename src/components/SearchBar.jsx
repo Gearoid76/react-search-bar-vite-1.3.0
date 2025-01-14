@@ -1,9 +1,9 @@
-// src/components/SearchBar.jsx
 import React, { useState, useEffect } from 'react';
-import { getAccessToken,redirectToAuthCodeFlow } from '../auth';
+import { getAccessToken, redirectToAuthCodeFlow } from '../auth';
 import { FaSearch } from 'react-icons/fa';
 import '../App.css';
 export const SearchBar = ({ setResults }) => {
+  const [input, setInput] = useState("");
   const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export const SearchBar = ({ setResults }) => {
   
       fetchToken();
   }, []);
-
+  
   const fetchData = async (value) => {
     console.log("Fetching data for:", value); 
     if (!accessToken) {
@@ -76,4 +76,3 @@ export const SearchBar = ({ setResults }) => {
     </div>
   );
 };
-
