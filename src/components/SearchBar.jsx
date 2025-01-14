@@ -1,19 +1,26 @@
 // src/components/SearchBar.jsx
 import React, { useState, useEffect } from 'react';
-import { getAccessToken } from '../auth';
+import { getAccessToken,redirectToAuthCodeFlow } from '../auth';
 import { FaSearch } from 'react-icons/fa';
 import '../App.css';
-export const SearchBar = ({ setResults, accessToken }) => {
-  const [input, setInput] = useState("");
+export const SearchBar = ({ setResults }) => {
+  const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
     console.log('Input at value:', input);
-    if (accessToken) {
-      console.log("Access Token Available:", accessToken); // Debugging line
-    } else {
-      console.error("Access token missing");
-    }
-  }, [accessToken]);
+      const fetchToken = async () => {
+        const client_id = import.meta.env.VITE_CLIENT_ID;
+          let token = await getAccessToken();
+          if (!token) {
+              console.error('Token retrieval failed. Redirecting to login.');
+              await redirectToAuthCodeFlow(client_id); // Redirect to reauthorize if token fails
+          } else {
+              setAccessToken(token);
+          }
+      };
+  
+      fetchToken();
+  }, []);
 
   const fetchData = async (value) => {
     console.log("Fetching data for:", value); 
